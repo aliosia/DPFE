@@ -1,0 +1,17 @@
+net: "../prototxt/train_val_pca_conv5-1.prototxt"
+test_iter: 200
+test_interval: 500
+momentum: 0.9
+momentum2: 0.999
+delta: 0.00000001
+lr_policy: "fixed"
+base_lr: 0.0001
+type: "Adam"
+display: 500
+max_iter: 3000
+snapshot: 500
+snapshot_prefix: "../model/pca/pca"
+solver_mode: GPU
+debug_info: false
+
+

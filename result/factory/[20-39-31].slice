@@ -1,0 +1,125 @@
+#####################################################################################################################
+######################################### FINETUNING ON SPECIFIED ATTRIBUTES ########################################
+#####################################################################################################################
+
+layer {
+  name: "silence_id"
+  type: "Silence"
+  bottom: "id_labels"
+}
+
+
+layer {
+  name: "slice_output"
+  type: "Slice"
+  bottom: "output"
+  top: "output_1_20"
+  top: "output_21"
+  top: "output_22_31"
+  top: "output_32"
+  top: "output_33_39"
+  top: "output_40"
+  slice_param {
+    axis: 1
+    slice_point: 20
+    slice_point: 21
+    slice_point: 31
+    slice_point: 32
+    slice_point: 39
+  }
+}
+layer {
+  name: "silence_output"
+  type: "Silence"
+  bottom: "output_1_20"
+  bottom: "output_22_31"
+  bottom: "output_33_39"
+}
+layer {
+  name: "output_concat"
+  bottom: "output_21"
+  bottom: "output_32"
+  bottom: "output_40"
+  top: "output_concat"
+  type: "Concat"
+  concat_param {
+    axis: 1
+  }
+}
+
+
+
+layer {
+  name: "shifted_labels"
+  type: "Scale"
+  bottom: "attribute_labels"
+  top: "shifted_labels"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  scale_param {
+    filler {
+      value: 0.5}
+    bias_term: true
+    bias_filler {
+      value: 0.5
+    }
+  }
+}
+layer {
+  name: "slice_labels"
+  type: "Slice"
+  bottom: "shifted_labels"
+  top: "labels_1_20"
+  top: "labels_21"
+  top: "labels_22_31"
+  top: "labels_32"
+  top: "labels_33_39"
+  top: "labels_40"
+  slice_param {
+    axis: 1
+    slice_point: 20
+    slice_point: 21
+    slice_point: 31
+    slice_point: 32
+    slice_point: 39
+  }
+}
+layer {
+  name: "silence_labels"
+  type: "Silence"
+  bottom: "labels_1_20"
+  bottom: "labels_22_31"
+  bottom: "labels_33_39"
+}
+layer {
+  name: "labels_concat"
+  bottom: "labels_21"
+  bottom: "labels_32"
+  bottom: "labels_40"
+  top: "labels_concat"
+  type: "Concat"
+  concat_param {
+    axis: 1
+  }
+}
+
+
+
+layer {
+  name: "attr_loss"
+  type: "SigmoidCrossEntropyLoss"
+  bottom: "output_concat"
+  bottom: "labels_concat"
+  top: "attr_loss"
+  loss_weight: 1
+}
+
+
+
+

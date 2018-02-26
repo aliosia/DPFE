@@ -1,0 +1,20 @@
+net: "../prototxt/train_simple_[20-39-31-6-7].prototxt"
+test_iter: 200
+test_interval: 500
+momentum: 0.9
+momentum2: 0.999
+delta: 0.00000001
+lr_policy: "fixed"
+base_lr: 0.000001
+type: "Adam"
+display: 500
+max_iter: 3000
+snapshot: 500
+snapshot_prefix: "../model/[20-39-31-6-7]/simple_finetune_[20-39-31-6-7]"
+solver_mode: GPU
+debug_info: false
+
+
+
+
+
