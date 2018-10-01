@@ -1,2 +1,10 @@
 # DPFE
-Caffe implementation of *Deep Private-Feature Extraction (DPFE)* ([arXiv](https://arxiv.org/abs/1802.03151)). 
+Caffe implementation of **Deep Private-Feature Extraction (DPFE)** ([arXiv](https://arxiv.org/abs/1802.03151)).
+
+What is a **Private-Feature**? extracted feature of the input data which is non-informative with respect to the user sensitive information, while still useful for other desired tasks. Private-feature is useful in the process of user-cloud interaction, when the user provides his/her data to a cloud service and also has some privacy concerns.
+
+Here we consider the problem of facial attributes (like gender and age) prediction, in which we want to use a cloud service to tag an image with facial attributes and at the same time we don't want to reveal our identity to the service provider.
+
+Considering a pretrained deep network for **facial attributes prediction** ([original model](https://github.com/camel007/caffe-moon)) first we should choose an intermediate layer of this network and then we should reduce its dimensionality. This can be done by using the file *code/01_apply_pca.py*. Our theory is based on cross entropy loss and batch normalization regularizer so we should fine the models: *code/02_pca_finetune.py*. Now its time to create *simple* or *DPFE* models. Considering an attribute set (like {gender & age}) we should fine tune each model for the chosen set with or without contrastive loss (for simple and dpfe). This is done by first using *code/03_factory.py* and then using *code/04_simple_finetune.py* and *code/05_dpfe_finetune.py*. Now we have all models ready and we should evaulate them b creating the **accuracy-privacy** curve. We introdcued the **log-rank privacy** measure in the paper and by using the file *code/06_accuracy_privacy.py* we can evaluate all models. At the end *code/07_plot_accpriv.py* help us for creating the plots.
+
+Be aware that we used **CAFFE** and you should use the file *code/filter.py* as a new python layer. All results will be saved in the *result* directory. Also read the comments at the first of each python file before running it.
